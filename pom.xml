@@ -221,25 +221,10 @@
 	</dependencies>
 
 
-	<build>
+	  <build>
 		<pluginManagement>
 			<plugins>
-
-				<plugin>
-					<artifactId>maven-dependency-plugin</artifactId>
-					<executions>
-						<execution>
-							<phase>install</phase>
-							<goals>
-								<goal>copy-dependencies</goal>
-							</goals>
-							<configuration>
-								<outputDirectory>${project.build.directory}/lib</outputDirectory>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
+			<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<configuration>
@@ -250,4 +235,5 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+
 </project>
