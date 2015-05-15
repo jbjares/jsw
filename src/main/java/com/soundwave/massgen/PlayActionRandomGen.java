@@ -1,14 +1,10 @@
 package com.soundwave.massgen;
 
 
-import java.io.File;
 import java.util.Random;
 import java.util.UUID;
 
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -24,7 +20,7 @@ import com.soundwave.util.RandomDateDataUtil;
 import com.soundwave.util.RandomSongDataUtil;
 
 @Service
-public class PlayActionRandomGen implements GenInterface{
+public class PlayActionRandomGen {
 
 	@Autowired
 	private PlayDAO playDao;

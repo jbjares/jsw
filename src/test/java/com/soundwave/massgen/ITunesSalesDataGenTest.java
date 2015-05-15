@@ -10,21 +10,21 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"classpath:applicationContext.xml"})
-public class PlayActionRandomGenTest {
+public class ITunesSalesDataGenTest {
 
 	@Autowired
-	private PlayActionRandomGen playActionRandomGen;
+	private ITunesSalesDataGen iTunesSalesDataGen;
 	
 	@Test
 	public void testPlayDI(){
-		Assert.assertNotNull(playActionRandomGen);
+		Assert.assertNotNull(iTunesSalesDataGen);
 	}
 	
 	@Ignore
 	@Test
 	public void testGen() throws Exception{
 		System.out.println("started");
-		playActionRandomGen.gen();
+		iTunesSalesDataGen.gen(new String[]{"src/main/resources/iTunesCodesAndCountries.csv","src/main/resources/itunessalesdata2.csv"});
 		System.out.println("finished");
 	}
 	

@@ -5,20 +5,7 @@
 	<artifactId>MassGen</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<configuration>
-						<source>1.7</source>
-						<target>1.7</target>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
+
 
 	<properties>
 		<spring.version>4.1.6.RELEASE</spring.version>
@@ -68,7 +55,7 @@
 		</repository>
 
 	</repositories>
-	
+
 	<dependencies>
 		<!-- Spring -->
 
@@ -232,4 +219,35 @@
 		</dependency>
 
 	</dependencies>
+
+
+	<build>
+		<pluginManagement>
+			<plugins>
+
+				<plugin>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<executions>
+						<execution>
+							<phase>install</phase>
+							<goals>
+								<goal>copy-dependencies</goal>
+							</goals>
+							<configuration>
+								<outputDirectory>${project.build.directory}/lib</outputDirectory>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>1.7</source>
+						<target>1.7</target>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 </project>

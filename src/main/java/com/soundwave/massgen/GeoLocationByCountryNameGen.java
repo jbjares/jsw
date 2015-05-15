@@ -21,7 +21,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.soundwave.model.googlegeo.GoogleGeoJson;
 
-public class GeoLocationByCountryNameGen implements GenInterface {
+public class GeoLocationByCountryNameGen  {
 	
 	public static void main(String[] args) throws Exception {
 		new GeoLocationByCountryNameGen().gen();
