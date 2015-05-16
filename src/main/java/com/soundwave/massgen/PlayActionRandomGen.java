@@ -2,13 +2,11 @@ package com.soundwave.massgen;
 
 
 import java.util.Random;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.soundwave.dao.PlayDAO;
 import com.soundwave.model.enumeration.SourceNamesEnum;
 import com.soundwave.model.playaction.Location;
@@ -29,54 +27,73 @@ public class PlayActionRandomGen {
 	private static final String ANDROID_X_X = "Android x.x.";
 	private static final String PLAY = "PLAY";
 	
-
-
-	public void gen() throws Exception {
-		//SIZE OF THE UNIVERSE -> 175000000
-		//HETEROGENEITY -> 50%
-		//MARGIN OF ERROR -> 5%
-		//CONFIDENCE LEVEL -> 95%
-		//SAMPLE -> 385
-		for(int i=0;i<=385;i++){
-			Play play = new Play();
-			play.setActionType(PLAY);
-			String anyDayFromTheLastTwoYears = RandomDateDataUtil.getFormatedAnyDayFromTheLastTwoYears();
-			play.setCreateTime(anyDayFromTheLastTwoYears);
-			play.setTime(anyDayFromTheLastTwoYears);
-			String id = UUID.randomUUID().toString();
-			play.setUserId(id);
-			play.setLocation(getLocation());
-			play.setSong(getSong());
-			play.setSource(getSource());
-			
-			Gson gson = new GsonBuilder().create();
-			String jsonStr = gson.toJson(play);
-			//FileUtils.writeStringToFile(new File("src/main/resources/sample/"+id+".json"),jsonStr,"UTF-8");
-			playDao.insert(play);
-		}
-		
+	public static void main(String[] args) {
+		PlayActionRandomGen playActionRandomGen = new PlayActionRandomGen();
+		playActionRandomGen.gen(args[0],args[1],new Long(args[2]));
 	}
 
-	private Source getSource() {
+
+	public void gen(String songPath, String latLngPath, long seed) {
+		try{
+			/**
+			 * 		//SIZE OF THE UNIVERSE -> 175000000
+					//HETEROGENEITY -> 50%
+					//MARGIN OF ERROR -> 5%
+					//CONFIDENCE LEVEL -> 95%
+					//SAMPLE -> 385
+			 */
+					for(int i=0;i<=385;i++){
+						Play play = new Play();
+						play.setActionType(PLAY);
+						String anyDayFromTheLastTwoYears = RandomDateDataUtil.getFormatedAnyDayFromTheLastTwoYears(seed);
+						play.setCreateTime(anyDayFromTheLastTwoYears);
+						play.setTime(anyDayFromTheLastTwoYears);
+						Random r = new Random();
+						r.setSeed(seed);
+						int randomInt = r.nextInt(385^2) + 1;
+						String id = Integer.toString(randomInt);
+						play.setUserId(id);
+						play.setLocation(getLocation(latLngPath,seed));
+						play.setSong(getSong(songPath,seed));
+						play.setSource(getSource(seed));
+						
+						//Gson gson = new GsonBuilder().create();
+						//String jsonStr = gson.toJson(play);
+						//FileUtils.writeStringToFile(new File("src/main/resources/sample/"+id+".json"),jsonStr,"UTF-8");
+						//playDao.insert(play);
+						ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+						PlayDAO dao = (PlayDAO) ctx.getBean(PlayDAO.class.getSimpleName());
+						dao.insert(play);
+					}
+					
+
+		}catch(Exception e){
+			throw new RuntimeException(e.getMessage(),e);
+		}
+	}
+
+	private Source getSource(long seed) {
 		Source source = new Source();
-		source.setAutoPlay(new Random().nextBoolean());
-		source.setBackgrounded(new Random().nextBoolean());
-		int sourceNameInt = new Random().nextInt(SourceNamesEnum.values().length);
+		Random rand= new Random();
+		rand.setSeed(seed);
+		source.setAutoPlay(rand.nextBoolean());
+		source.setBackgrounded(rand.nextBoolean());
+		int sourceNameInt = rand.nextInt(SourceNamesEnum.values().length);
 		source.setPlatform(ANDROID_X_X+sourceNameInt);
 		source.setName(SourceNamesEnum.get(sourceNameInt).name());
 		source.setDevice(XYZ_V+sourceNameInt);
 		return source;
 	}
 
-	private Song getSong() {
+	private Song getSong(String songPath, long seed) {
 		Song song = new Song();
-		song.setArtist(RandomSongDataUtil.getSoundSample()[4]);
-		song.setTitle(RandomSongDataUtil.getSoundSample()[5]);
+		song.setArtist(RandomSongDataUtil.getSoundSample(songPath,seed)[4]);
+		song.setTitle(RandomSongDataUtil.getSoundSample(songPath,seed)[5]);
 		return song;
 	}
 
-	private Location getLocation() {
-		String[] result = RandomCountryLatLngDataUtil.choose();
+	private Location getLocation(String latLngPath, long seed) {
+		String[] result = RandomCountryLatLngDataUtil.choose(latLngPath,seed);
 		Location location = new Location();
 		location.setCountry(result[0]);
 		location.setLat(result[1]);

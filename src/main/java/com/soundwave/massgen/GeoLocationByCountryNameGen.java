@@ -24,23 +24,16 @@ import com.soundwave.model.googlegeo.GoogleGeoJson;
 public class GeoLocationByCountryNameGen  {
 	
 	public static void main(String[] args) throws Exception {
-		new GeoLocationByCountryNameGen().gen();
+		GeoLocationByCountryNameGen geoLocationByCountryNameGen = new GeoLocationByCountryNameGen();
+		geoLocationByCountryNameGen.gen(args[0],args[1]);
 	}
 
-	public void gen() throws Exception {
-		System.out.println("Started");
-		genCountryLatLngCsv();
-		System.out.println("Finished");
-	}
-
-	
-
-	public static void genCountryLatLngCsv() throws Exception{
+	public void gen(String input, String output) throws Exception{
 		  CloseableHttpClient httpClient = null;
 
 		  StringBuilder resultCSV = new StringBuilder();
 		  try{
-			  List<String> countries = getCountryNamesAsList(new File("src/main/resources/iTunesCodesAndCountries.csv"));
+			  List<String> countries = getCountryNamesAsList(new File(input));
 			  resultCSV.append("COUNTRY");
 			  resultCSV.append(";");
 			  resultCSV.append("LAT");
@@ -64,10 +57,10 @@ public class GeoLocationByCountryNameGen  {
 	    			BufferedReader br = new BufferedReader(
 	    	                         new InputStreamReader((response.getEntity().getContent())));
 	    	 
-	    			String output;
+	    			String out;
 	    			System.out.println("Output from Server .... \n");
-	    			while ((output = br.readLine()) != null) {
-	    				result.append(output);
+	    			while ((out = br.readLine()) != null) {
+	    				result.append(out);
 	    			}
 		    	 Gson gson = new GsonBuilder().create();
 		    	 JsonReader reader = new JsonReader(new StringReader(result.toString()));
@@ -88,7 +81,7 @@ public class GeoLocationByCountryNameGen  {
 		  }finally{
 			  httpClient.close();
 		  }
-		  FileUtils.writeStringToFile(new File("src/main/resources/countriesLatLng.csv"),resultCSV.toString(),"UTF-8");
+		  FileUtils.writeStringToFile(new File(output),resultCSV.toString(),"UTF-8");
 	  }
 
 	public static List<String> getCountryNamesAsList(File f)

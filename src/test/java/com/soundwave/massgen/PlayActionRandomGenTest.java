@@ -24,7 +24,7 @@ public class PlayActionRandomGenTest {
 	@Test
 	public void testGen() throws Exception{
 		System.out.println("started");
-		playActionRandomGen.gen();
+		//playActionRandomGen.gen();
 		System.out.println("finished");
 	}
 	

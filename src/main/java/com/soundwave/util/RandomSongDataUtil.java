@@ -2,30 +2,25 @@ package com.soundwave.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 
 public class RandomSongDataUtil {
-	  public static void main(String[] args) throws FileNotFoundException {
-		  System.out.println(getSoundSample()[4]);
-		  System.out.println(getSoundSample()[5]);
-		  }
 	  
-	  public static String[] getSoundSample(){
+	  public static String[] getSoundSample(String path, long seed){
 		  try{
-			  String s = choose(new File("src/main/resources/itunessalesdata2.csv"));	
+			  String s = choose(new File(path),seed);	
 			  return s.split(";");			  
 		  }catch(Exception e){
 			  throw new RuntimeException(e.getMessage(),e);
 		  }
 	  }
 
-		  public static String choose(File f) throws FileNotFoundException
+		  public static String choose(File f,long seed) throws FileNotFoundException
 		  {
 		     String result = null;
 		     Random rand = new Random();
+		     rand.setSeed(seed);
 		     int n = 0;
 		     for(Scanner sc = new Scanner(f); sc.hasNext(); )
 		     {

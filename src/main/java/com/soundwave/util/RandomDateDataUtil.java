@@ -22,7 +22,7 @@ public class RandomDateDataUtil {
         dMax = max;
     }
     
-    public Date generate() {
+    public Date generate(long seed) {
         long MILLIS_PER_DAY = 1000*60*60*24;
         GregorianCalendar s = new GregorianCalendar();
         s.setTimeInMillis(dMin.getTime());
@@ -36,11 +36,13 @@ public class RandomDateDataUtil {
         
         Calendar cal = Calendar.getInstance();
         cal.setTime(dMin);
-        cal.add(Calendar.DATE, new Random().nextInt((int)dayDiff));          
+        Random rand = new Random();
+        rand.setSeed(seed);
+        cal.add(Calendar.DATE,rand.nextInt((int)dayDiff));          
         return cal.getTime();
     }
     
-    public static Date getAnyDayFromTheLastTwoYears(){
+    public static Date getAnyDayFromTheLastTwoYears(long seed){
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.YEAR, -2); // today minus two years
         Date dMin = cal.getTime();
@@ -49,29 +51,14 @@ public class RandomDateDataUtil {
         Date dMax = cal.getTime();
         
         RandomDateDataUtil rnd = new RandomDateDataUtil(dMin, dMax);
-        return rnd.generate();
+        
+        return rnd.generate(seed);
     }
     
-    // =========
-    // Test it:
-    // =========
-    public static void main(String args[]) {
-//        Calendar cal = Calendar.getInstance();
-//        cal.add(Calendar.YEAR, -2); // today minus two years
-//        Date dMin = cal.getTime();
-//        //cal.add(Calendar.YEAR, 2); // today plus one year
-//        cal.add(Calendar.YEAR, 1); // today
-//        Date dMax = cal.getTime();
-//        
-//        RandomDateGenerator rnd = new RandomDateGenerator(dMin, dMax);
-//        for (int i=1; i<=10; i++)
-//            System.out.println("Date = " + rnd.generate());
-    	System.out.println(getAnyDayFromTheLastTwoYears());
-    }
 
-	public static String getFormatedAnyDayFromTheLastTwoYears() {
+	public static String getFormatedAnyDayFromTheLastTwoYears(long seed) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-		String anyDayFromTheLastTwoYears = sdf.format(RandomDateDataUtil.getAnyDayFromTheLastTwoYears());
+		String anyDayFromTheLastTwoYears = sdf.format(RandomDateDataUtil.getAnyDayFromTheLastTwoYears(seed));
 		return anyDayFromTheLastTwoYears;
 	}
 }

@@ -6,11 +6,12 @@ import java.util.Scanner;
 
 public class RandomCountryLatLngDataUtil {
 
-	public static String[] choose() {
+	public static String[] choose(String path,long seed) {
 		String result = null;
 		try{
-			File f = new File("src/main/resources/countriesLatLng.csv");
+			File f = new File(path);
 			Random rand = new Random();
+			rand.setSeed(seed);
 			int n = 0;
 			for (Scanner sc = new Scanner(f); sc.hasNext();) {
 				++n;
