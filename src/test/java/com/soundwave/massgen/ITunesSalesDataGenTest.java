@@ -24,7 +24,7 @@ public class ITunesSalesDataGenTest {
 	@Test
 	public void testGen() throws Exception{
 		System.out.println("started");
-		iTunesSalesDataGen.gen(new String[]{"src/main/resources/iTunesCodesAndCountries.csv","src/main/resources/itunessalesdata2.csv"});
+		iTunesSalesDataGen.gen("src/main/resources/iTunesCodesAndCountries.csv","src/main/resources/itunessalesdata2.csv");
 		System.out.println("finished");
 	}
 	
