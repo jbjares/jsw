@@ -28,12 +28,18 @@ public class PlayActionRandomGen {
 	private static final String PLAY = "PLAY";
 	
 	public static void main(String[] args) {
-		PlayActionRandomGen playActionRandomGen = new PlayActionRandomGen();
-		playActionRandomGen.gen(args[0],args[1],new Long(args[2]));
+		System.out.println("started");
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("./src/main/resources/applicationContext.xml");
+		PlayActionRandomGen playActionRandomGen = (PlayActionRandomGen) ctx.getBean(PlayActionRandomGen.class.getSimpleName());
+		String songPath = args[0];
+		String latLngPath = args[1]; 
+		long seed  = new Long(args[2]);
+		playActionRandomGen.gen(songPath,latLngPath,seed);
+		System.out.println("finished");
 	}
 
 
-	public void gen(String songPath, String latLngPath, long seed) {
+	public void gen(String songPath, String latLngPath,long seed) {
 		try{
 			/**
 			 * 		//SIZE OF THE UNIVERSE -> 175000000
@@ -61,9 +67,11 @@ public class PlayActionRandomGen {
 						//String jsonStr = gson.toJson(play);
 						//FileUtils.writeStringToFile(new File("src/main/resources/sample/"+id+".json"),jsonStr,"UTF-8");
 						//playDao.insert(play);
-						ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+						ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("./src/main/resources/applicationContext.xml");
 						PlayDAO dao = (PlayDAO) ctx.getBean(PlayDAO.class.getSimpleName());
 						dao.insert(play);
+						//playDao.insert(play);
+						//insertWithoutSpring(play,seed);
 					}
 					
 
@@ -71,6 +79,13 @@ public class PlayActionRandomGen {
 			throw new RuntimeException(e.getMessage(),e);
 		}
 	}
+
+//	private void insertWithoutSpring(Play play, long seed) {
+//		PlayDAO dao = new PlayDAO();
+//		dao.insertWithoutSpring(play, seed);
+//		
+//	}
+
 
 	private Source getSource(long seed) {
 		Source source = new Source();
